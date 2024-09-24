@@ -1,5 +1,6 @@
 import numpy as np
- # Vector de características
+
+# Vector de características
 X = np.array([[0,0,0,1,0,1], 
               [1,0,0,0,0,0],
               [1,0,1,0,1,0],
@@ -43,25 +44,25 @@ if tamanioYd == tamanioYobt:
             fp = fp+1
 
 # Cálculo de la presición
-p = 0
-p = vp / (vp + fp)
+P = 0
+P = vp / (vp + fp)
 
 # Cálculo de la exactitud 
-ex = 0
-ex = (vp + vn) / ( vp + vn + fp + fn)
+Ex = 0
+Ex = (vp + vn) / ( vp + vn + fp + fn)
 
-# Cálculo de la recall
-r = 0
-r = vp / (vp + fn)
+# Cálculo del recall
+R = 0
+R = vp / (vp + fn)
 
-# Cálculo de la presición
+# Cálculo del F2 Score
 F2 = 0
-F2 = 2 * p * r / ( p + r)
+F2 = 2 * P * R / ( P + R)
 
-print(p)
-print(ex)
-print(r)
-print(F2)
+print(f"Presicion: { P }")
+print(f"Exactitud: { Ex }")
+print(f"Recall: { R }")
+print(f"F2 Score: { F2 }")
 
 # for i in range(filas):
     #for j in range(columnas):
