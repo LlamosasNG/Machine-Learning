@@ -19,10 +19,11 @@ for i in range(epocas):
     a -= (lr / m) * np.sum((Yobt - Yd) * X)
     b -= (lr / m) * np.sum((Yobt - Yd))
     ECM = (1 / (2 * m)) * np.sum(Yobt - Yd) **2
-    # print(ECM)
- 
-print(f"a = { a }")
-print(f"b = { b }")
+    #print(ECM)
+
+print(Yobt)
+#print(f"a = { a }")
+#print(f"b = { b }")
 
 # 4.- Grafica de las funciones
 plt.scatter(X, Yd, color='blue', label='Datos originales')  # Graficar puntos 
