@@ -27,10 +27,10 @@ tamanioYd = len(Yd)
 tamanioYobt = len(Yobt)
 
 # Obtuvimos la cantidad de verdaderos positivos, verdaderos negativos, falsos negativos y falsos positivos.
-vp=0
-vn=0
-fn=0
-fp=0
+vp = 0
+vn = 0
+fn = 0
+fp = 0
 
 if tamanioYd == tamanioYobt:
     for i in range(tamanioYd):

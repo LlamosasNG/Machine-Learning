@@ -25,7 +25,6 @@ for i in range(epocas):
 print(f"a = { a }")
 print(f"b = { b }")
 
-
 # 4.- Grafica de las funciones
 plt.scatter(X, Yd, color='blue', label='Datos originales')  # Graficar puntos 
 plt.plot(X, Yobt, color='red', label='Recta de regresión')  # Graficar línea
