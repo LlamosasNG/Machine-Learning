@@ -15,24 +15,22 @@ theta = np.array([.5, 1])
 
 # Hiperpárametros dentro del modelo
 lr = 0.01
-epocas = 200
+epocas = 1000
 m = len(Yd)
 
 for i in range(epocas):
     # Realizar el producto punto de cada una de mis muestras con el vector theta
     Z = np.dot(X, theta)
     H = Sigmoide(Z)
-    for i in range(len(H)):
-        if (H[i] >= 0.5):
-            Yobt[i] = 1
-        else:
-            Yobt[i] = 0
-        
-        # Evaluar la función de costo
-        #J = -(1/m) * np.sum(Yd * np.log(H) + (1-Yd) * np.log(1-H))    
+      
+    # Evaluar la función de costo
+    J = -(1/m) * np.sum(Yd * np.log(H) + (1-Yd) * np.log(1-H))    
 
-        #theta = theta - lr * (1/m) * np.dot((H - Yd), X)
-
-
+    #Calcular el gradiente y actualizar theta
+    #theta = theta - lr * (1/m) * np.dot(X.T,(H-Yd))
+    #theta = theta - lr * (1/m) * np.dot((H - Yd), X)
+print(H)
+print(X)
+print(theta)
     
     
