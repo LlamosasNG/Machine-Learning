@@ -18,9 +18,8 @@ print(f"b = {b}")
 Yobt = a * X + b
 #print(Yobt)
 
-ECM = (1 / (2 * m)) * np.sum(Yobt - Yd) **2
+ECM = (1 / (2*m)) * np.sum(Yobt - Yd) **2
 print(ECM)
-
 end_time = time.time()
 print(f"El tiempo de ejecución es de {end_time - start_time} segundos")
 
