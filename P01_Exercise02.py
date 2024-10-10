@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # 1.- Definir los datos de entrada 
 X = np.array([2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019])
-Yd = np.array([5.1, 5.4, 5.7, 6, 6.9, 7.5, 8.8, 9.8, 10.5, 9.0])
+Yd = np.array([5.1,5.4, 5.7, 6, 6.9, 7.5, 8.8, 9.8, 10.5, 9.0])
 
 # 2.- Definir parametros
 a = .6
