@@ -7,7 +7,7 @@ Yd = np.array([5.1, 5.4, 5.7, 6, 6.9, 7.5, 8.8, 9.8, 10.5, 9.0])
 
 # 2.- Definir parametros
 a = 0.6
-b = 1217
+b = -1217.2
 lr = 0.0000001
 epocas = 4000  
 m = len(Yd)
