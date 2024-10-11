@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import time
 
 # 1.- Definir los datos de entrada 
-X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+X = np.array([1,2,3,4,5,6,7,8,9,10])
 Yd = np.array([0.8,2.95,2.3,3.6,5.2,5.3,6.1,5.9,7.6,9])
 
 start_time = time.time()
@@ -18,13 +18,10 @@ print(f"b = {b}")
 Yobt = a * X + b
 #print(Yobt)
 
-ECM = (1 / (2 * m)) * np.sum(Yobt - Yd) **2
-print(ECM)
-
 end_time = time.time()
 print(f"El tiempo de ejecución es de {end_time - start_time} segundos")
 
-""" # 4.- Grafica de las funciones
+# 4.- Grafica de las funciones
 plt.scatter(X, Yd, color='blue', label='Datos originales')  # Graficar puntos 
 plt.plot(X, Yobt, color='red', label='Recta de regresión')  # Graficar línea
 
@@ -32,4 +29,4 @@ plt.xlabel('X')
 plt.ylabel('Yd')  
 plt.title('Regresión Lineal Simple')  
 
-plt.show() """
+plt.show()
