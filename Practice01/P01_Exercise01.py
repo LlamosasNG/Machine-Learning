@@ -11,12 +11,11 @@ start_time = time.time()
 m = len(Yd) 
 a = ((m * np.sum(X * Yd)) - (np.sum(X) * np.sum(Yd))) / ((m * np.sum(X ** 2)) - (np.sum(X) ** 2))
 b = (np.sum(Yd) - a * np.sum(X)) / m
-print(f"a = {a}")
+print(f"a = {a}")   
 print(f"b = {b}")
 
 # 3.- Calcular los valores estimados (Yobt)
 Yobt = a * X + b
-#print(Yobt)
 
 end_time = time.time()
 print(f"El tiempo de ejecución es de {end_time - start_time} segundos")

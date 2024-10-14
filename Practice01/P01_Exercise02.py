@@ -1,21 +1,18 @@
-# Regresion lineal vía actualización de pesos
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 # 1.- Definir los datos de entrada 
-X = np.array([1,2,3,4,5,6,7,8,9,10])
-Yd = np.array([0.8,2.95,2.3,3.6,5.2,5.3,6.1,5.9,7.6,9])
+X = np.array([2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019])
+Yd = np.array([5.1,5.4, 5.7, 6, 6.9, 7.5, 8.8, 9.8, 10.5, 9.0])
 
 # 2.- Definir parametros
-a = 0.7
-b = 0.9
-lr = 0.05
-epocas = 4000
+a = 0.6
+b = -1217.2
+lr = 0.0000001
+epocas = 4000  
 m = len(Yd)
 
 Yobt = np.zeros(m)
-start_time = time.time()
 for i in range(epocas):
     # 3.- Calculamos Yobt
     Yobt = a * X + b
@@ -25,21 +22,19 @@ for i in range(epocas):
 
 print(f"a = { a }")
 print(f"b = { b }")
-print(Yobt)
+
+print(f"La prevision del año 2020 es: {(a*2020)+b} MDP")
+
 # 4.- Grafica de las funciones
-#print(Yobt)
-print(ECM)
-
-end_time = time.time()
-print(f"El tiempo de ejecución es de {end_time - start_time} segundos")
-
-""" # 4.- Grafica de las funciones
 plt.scatter(X, Yd, color='blue', label='Datos originales')  # Graficar puntos 
 plt.plot(X, Yobt, color='red', label='Recta de regresión')  # Graficar línea
 
-plt.xlabel('X')  
-plt.ylabel('Yd')  
-plt.title('Regresión Lineal Vía Actualización de Pesos')  
+plt.xlabel('Año')  
+plt.ylabel('MDD')  
+plt.title('Regresión Lineal Vía Gradiente Descendente')  
 
 plt.show()
- """
+
+# 5.- Valores del usuario
+year = float(input("Ingrese el año que desea predecir: "))
+print(f"La prevision del año {year} es: {(a*year)+b} MDP")
