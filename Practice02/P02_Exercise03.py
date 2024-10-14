@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+epsilon = 0.01
+
 # Definir la función sigmoide
 def Sigmoide(z):
     return 1 / (1 + np.exp(-z))
 
-# Corregir la función ValidateH para trabajar con arrays
 def ValidateH(H):
     Predictions = np.zeros(len(H))  
     for i in range(len(H)):
@@ -22,7 +23,7 @@ Yobt = np.zeros(len(Yd))
 
 # Definiendo hiperparámetros
 n = len(X[0])
-theta = np.zeros(n)
+theta = np.zeros(n)  
 theta0 = 0
 
 # Hiperparámetros dentro del modelo
@@ -30,6 +31,7 @@ lr = 0.1
 epocas = 1000
 m = len(Yd)
 
+# Array para almacenar los valores de J
 J_hist = np.zeros(epocas)
 
 for i in range(epocas):
@@ -43,6 +45,9 @@ for i in range(epocas):
 
     theta0 = theta0 - lr * (1/m) * np.sum(H - Yd)
     theta = theta - lr * (1/m) * np.dot(X.T, (H - Yd))
+    
+    if abs(J_hist[i] - J_hist[i-1]) < epsilon:
+        break
 
 Yobt = ValidateH(H)
 
@@ -51,6 +56,7 @@ print(f"Theta: {theta}")
 
 plt.scatter(X[:, 1], Yd, color='blue', label='Datos de entrenamiento')
 
+# Escalar la función de costo para que sea visible junto con los puntos
 J_hist_scaled = (J_hist - np.min(J_hist)) / (np.max(J_hist) - np.min(J_hist))
 plt.plot(np.linspace(2, 21, epocas), J_hist_scaled, color='green', label='Función de costo J (escalada)')
 
@@ -59,4 +65,3 @@ plt.ylabel('Yd / H')
 plt.title('Regresión logística')
 plt.legend()
 plt.show()
-
