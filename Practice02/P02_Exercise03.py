@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-epsilon = 0.01
+epsilon = 0.000001
 
 # Definir la función sigmoide
 def Sigmoide(z):
@@ -27,7 +27,7 @@ theta = np.zeros(n)
 theta0 = 0
 
 # Hiperparámetros dentro del modelo
-lr = 0.1
+lr = 0.04
 epocas = 1000
 m = len(Yd)
 
@@ -46,7 +46,9 @@ for i in range(epocas):
     theta0 = theta0 - lr * (1/m) * np.sum(H - Yd)
     theta = theta - lr * (1/m) * np.dot(X.T, (H - Yd))
     
-    if abs(J_hist[i] - J_hist[i-1]) < epsilon:
+    print(J_hist[i] - J_hist[i-1])
+    if i > 0 and abs(J_hist[i] - J_hist[i-1]) < epsilon:
+        print(f"Termina en {i} epocas")
         break
 
 Yobt = ValidateH(H)
@@ -57,7 +59,9 @@ print(f"Theta: {theta}")
 plt.scatter(X[:, 1], Yd, color='blue', label='Datos de entrenamiento')
 
 J_hist_scaled = (J_hist - np.min(J_hist)) / (np.max(J_hist) - np.min(J_hist))
-plt.plot(np.linspace(2, 21, epocas), J_hist_scaled, color='green', label='Función de costo J (escalada)')
+#plt.plot(np.linspace(2, 21, epocas), J_hist_scaled, color='green', label='Función de costo J (escalada)')
+plt.plot(X[:, 1], H, color='red', label='Regresión logística')
+
 
 plt.xlabel('X')
 plt.ylabel('Yd / H')

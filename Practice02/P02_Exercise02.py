@@ -26,7 +26,7 @@ theta = np.zeros(n)
 theta0 = 0
 
 # Hiperparámetros dentro del modelo
-lr = 0.1
+lr = 0.04
 epocas = 1000
 m = len(Yd)
 
@@ -53,6 +53,7 @@ plt.scatter(X[:, 1], Yd, color='blue', label='Datos de entrenamiento')
 
 J_hist_scaled = (J_hist - np.min(J_hist)) / (np.max(J_hist) - np.min(J_hist))
 plt.plot(np.linspace(2, 21, epocas), J_hist_scaled, color='green', label='Función de costo J (escalada)')
+plt.plot(X[:, 1], H, color='red', label='Regresión logística')
 
 plt.xlabel('X')
 plt.ylabel('Yd / H')

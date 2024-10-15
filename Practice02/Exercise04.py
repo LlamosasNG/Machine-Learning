@@ -24,7 +24,7 @@ Yobt = np.zeros(len(Yd))
 theta = np.zeros(X.shape[1])
 
 # Hiperparámetros dentro del modelo
-lr = 0.1
+lr = 0.04
 epocas = 1000
 m = len(Yd)
 
@@ -52,8 +52,7 @@ Yobt = ValidateH(H)
 plt.scatter(X[:, 1], Yd, color='blue', label='Datos de entrenamiento')
 # plt.plot(X[:, 1], H, color='red', label='Regresión logística')
 
-# Escalar la función de costo para que sea visible junto con los puntos (ya que su magnitud es diferente)
-J_hist_scaled = (J_hist - np.min(J_hist)) / (np.max(J_hist) - np.min(J_hist))  # Escalar entre 0 y 1
+J_hist_scaled = (J_hist - np.min(J_hist)) / (np.max(J_hist) - np.min(J_hist))
 plt.plot(np.linspace(2, 5, epocas), J_hist_scaled, color='green', label='Función de costo J (escalada)')
 
 plt.xlabel('X')
