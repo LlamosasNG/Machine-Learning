@@ -13,8 +13,14 @@ def data_set():
   # Set 3 Data POLINOMIAL
   x3 = np.linspace(-10, 10, 20)
   y3 = 0.0025 * x3**4 - 0.003 * x3**3 + 0.008 * x3**2 + 0.007 * x3 + 0.08 * np.random.normal(-5, 5, x3.shape)
+  
+  x4 = np.linspace(-10, 10, 20)
+  y4 = (0.002 * x4**8 - 0.005 * x4**7 + 0.01 * x4**6 
+      - 0.02 * x4**5 + 0.03 * x4**4 - 0.04 * x4**3 
+      + 0.05 * x4**2 - 0.06 * x4 + 2 
+      + np.random.normal(0, 20, x4.shape))
 
-  return (x1, y1), (x2, y2), (x3, y3)
+  return (x1, y1), (x2, y2), (x3, y3), (x4, y4)
 
 def normalization(X):
   X_mean = np.mean(X)
@@ -23,7 +29,7 @@ def normalization(X):
 
   return X_stdized
 
-(x1, y1), (x2, y2), (x3, y3) = data_set()
+(x1, y1), (x2, y2), (x3, y3), (x4, y4) = data_set()
 
 # Definición de parámetros
 lr = 0.01
@@ -61,7 +67,8 @@ for i in range(epocas):
   B0 = B0 - (lr / m) * np.sum(Yobt - Yd)
 
 # Graficar el ECM
-plt.plot(historial_ECM)
+# plt.plot(historial_ECM)
+plt.scatter(x4, y4)
 plt.xlabel('Epocas')
 plt.ylabel('ECM')
 plt.title("Historial de ECM durante el entrenamiento")
