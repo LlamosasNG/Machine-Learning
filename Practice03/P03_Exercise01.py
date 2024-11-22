@@ -1,6 +1,29 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def userData(B, B0):
+  # Solicitar un nuevo punto al usuario
+  print("Ingrese un nuevo punto (X, Y) para clasificar:")
+  new_x = float(input("Nuevo X: "))
+  new_y = float(input("Nuevo Y: "))
+
+  # Normalizar el nuevo punto
+  new_x_norm = normalization(new_x)
+
+  # Construir las características para el nuevo punto
+  new_x_features = np.array([new_x_norm ** (j + 1) for j in range(n)])
+
+  # Predecir Y para el nuevo punto basado en el modelo
+  new_y_pred = np.dot(new_x_features, B) + B0
+
+  # Determinar la clase del nuevo punto
+  if new_y >= new_y_pred: 
+      nueva_clase = 1  # Clase 1: Por encima del ajuste
+  else:
+      nueva_clase = 0  # Clase 0: Por debajo del ajuste
+
+  return nueva_clase
+  
 def data_set():
   # Set 1 Data CUADRÁTICA
   x1 = np.linspace(-10, 10, 20)
@@ -13,11 +36,17 @@ def data_set():
   # Set 3 Data POLINOMIAL
   x3 = np.linspace(-30, 30, 20)
   y3 = 0.0025 * x3**4 - 0.003 * x3**3 + 0.008 * x3**2 + 0.007 * x3 + 0.08 * np.random.normal(-5, 5, x3.shape)
-  
+
   # Set 4 Data POLINOMIAL
-  x4 = np.linspace(-25, 25, 20)
-  y4 = (0.002 * x4**8 - 0.005 * x4**7 + 0.01 * x4**6 - 0.02 * x4**5 + 0.03 * x4**4 - 0.04 * x4**3  + 0.05 * x4**2 - 0.06 * x4 + 2 + 10 * np.sin(x4) + 5 * np.cos(0.5 * x4) + np.random.normal(0, 20, x4.shape))
-  
+  x4 = np.linspace(-30, 30, 200)
+  y4 = (0.000000000000000025 * x4**8 
+      - 0.000000000000000001 * x4**7 
+      + 0.000000000000000054 * x4**6 
+      - 0.000000000000000008 * x4**5 
+      + 0.000000000000000005 * x4**4 
+      - 0.000000000000000001 * x4**3  
+      - 2 * x4**2 - 2 * x4 + 500 * np.random.normal(0, 10, x4.shape)) 
+
   return (x1, y1), (x2, y2), (x3, y3), (x4, y4)
 
 def normalization(X):
@@ -29,8 +58,8 @@ def normalization(X):
 # Definición de parámetros
 lr = 0.01
 epocas = 60000
-Yd = y3
-X = x3
+Yd = y4
+X = x4
 
 # Solicitar el grado del polinomio
 print("Ingrese el grado del polinomio entre 1 y 15: ")
@@ -93,3 +122,6 @@ plt.ylabel("Y")
 plt.legend()
 plt.grid(True)
 plt.show()
+
+Pclass = userData(B, B0)
+print(f"El nuevo punto pertenece a la clase {Pclass}")
