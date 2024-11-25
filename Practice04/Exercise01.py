@@ -30,7 +30,7 @@ def distancia_ecluidiana(X, x_test):
         distancia[i] = (np.sqrt(d[i][0] + d[i][1]), i) 
     return distancia
 
-def KNN(K, lista_con_indice_ordenados, Y_etiquetas):
+def KNN(K, lista_con_indice_ordenados, Y):
     contador_clase1 = 0
     contador_clase2 = 0
     for j in range(0, K):

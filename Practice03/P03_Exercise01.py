@@ -1,28 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-def userData(B, B0):
-  # Solicitar un nuevo punto al usuario
-  print("Ingrese un nuevo punto (X, Y) para clasificar:")
-  new_x = float(input("Nuevo X: "))
-  new_y = float(input("Nuevo Y: "))
-
-  # Normalizar el nuevo punto
-  new_x_norm = normalization(new_x)
-
-  # Construir las características para el nuevo punto
-  new_x_features = np.array([new_x_norm ** (j + 1) for j in range(n)])
-
-  # Predecir Y para el nuevo punto basado en el modelo
-  new_y_pred = np.dot(new_x_features, B) + B0
-
-  # Determinar la clase del nuevo punto
-  if new_y >= new_y_pred: 
-      nueva_clase = 1  # Clase 1: Por encima del ajuste
-  else:
-      nueva_clase = 0  # Clase 0: Por debajo del ajuste
-
-  return nueva_clase
   
 def data_set():
   # Set 1 Data CUADRÁTICA
@@ -45,7 +22,7 @@ def data_set():
       - 0.000000000000000008 * x4**5 
       + 0.000000000000000005 * x4**4 
       - 0.000000000000000001 * x4**3  
-      - 2 * x4**2 - 2 * x4 + 500 * np.random.normal(0, 5, x4.shape)) 
+      - 2 * x4**2 - 2 * x4 + 50 * np.random.normal(0, 5, x4.shape)) 
 
   return (x1, y1), (x2, y2), (x3, y3), (x4, y4)
 
@@ -91,11 +68,11 @@ for i in range(epocas):
   B0 = B0 - (lr / m) * np.sum(Yobt - Yd)
 
 # Graficar el ECM
-plt.plot(historial_ECM)
+""" plt.plot(historial_ECM)
 plt.xlabel('Epocas')
 plt.ylabel('ECM')
 plt.title("Historial de ECM durante el entrenamiento")
-plt.show()
+plt.show() """
 
 # Visualización de la curva ajustada
 x_plot = np.linspace(min(X), max(X), 100)
@@ -111,17 +88,36 @@ y_plot = np.dot(XX_test, B) + B0
 # Clasificación en base a Yobt
 labels = (Yd >= Yobt).astype(int)  # Clase 1: Por encima de Yobt, Clase 0: Por debajo
 
-# Visualización de la clasificación
+# Agregar el nuevo punto al gráfico
+new_x = float(input("Nuevo X: "))
+new_y = float(input("Nuevo Y: "))
+
+# Normalizar el nuevo punto
+new_x_norm = normalization(new_x)
+
+# Construir las características para el nuevo punto
+new_x_features = np.array([new_x_norm ** (j + 1) for j in range(n)])
+
+# Predecir Y para el nuevo punto basado en el modelo
+new_y_pred = np.dot(new_x_features, B) + B0
+
+# Determinar la clase del nuevo punto
+if new_y >= new_y_pred: 
+    nueva_clase = 1  # Clase 1: Por encima del ajuste
+else:
+    nueva_clase = 0  # Clase 0: Por debajo del ajuste
+
+# Visualización de la clasificación con el nuevo punto
 plt.figure(figsize=(10, 6))
 plt.scatter(X[labels == 0], Yd[labels == 0], marker='x', color="red", label="Clase 0")
 plt.scatter(X[labels == 1], Yd[labels == 1], marker='o', color="blue", label="Clase 1")
 plt.plot(x_plot, y_plot, color="black", linestyle="--", label="Ajuste Polinomial")
-plt.title("Clasificación basada en Yobt")
+plt.scatter(new_x, new_y, color="green", marker="*", s=200, label=f"Nuevo Punto (Clase {nueva_clase})")
+plt.title("Clasificación")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.legend()
 plt.grid(True)
 plt.show()
 
-Pclass = userData(B, B0)
-print(f"El nuevo punto pertenece a la clase {Pclass}")
+print(f"El nuevo punto ({new_x}, {new_y}) pertenece a la clase {nueva_clase}")
