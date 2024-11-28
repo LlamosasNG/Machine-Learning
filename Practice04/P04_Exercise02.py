@@ -78,10 +78,10 @@ base_J[8, 3:6] = 1
 base_J[7:9, 3] = 1
 
 # Generación de Variaciones
-patterns_O = [base_O + np.random.uniform(-0.5, 0.5, base_O.shape) for _ in range(10)]
-patterns_T = [base_T + np.random.uniform(-0.5, 0.5, base_T.shape) for _ in range(10)]
-patterns_L = [base_L + np.random.uniform(-0.5, 0.5, base_L.shape) for _ in range(10)]
-patterns_J = [base_J + np.random.uniform(-0.5, 0.5, base_J.shape) for _ in range(10)]
+patterns_O = [base_O + np.random.uniform(-0.1, 0.1, base_O.shape) for _ in range(10)]
+patterns_T = [base_T + np.random.uniform(-0.1, 0.1, base_T.shape) for _ in range(10)]
+patterns_L = [base_L + np.random.uniform(-0.1, 0.1, base_L.shape) for _ in range(10)]
+patterns_J = [base_J + np.random.uniform(-0.1, 0.1, base_J.shape) for _ in range(10)]
 
 # Generación de Patrones Ruidosos
 noisy_patterns_O = base_O + np.random.uniform(-0.2, 0.2, base_O.shape)
@@ -126,7 +126,7 @@ quick_sort(distancias_T, 0, len(distancias_T)-1)
 quick_sort(distancias_L, 0, len(distancias_L)-1)
 quick_sort(distancias_J, 0, len(distancias_J)-1)
 
-K = 3
+K = 5
 clase_O = KNN(K, distancias_O, Y)
 clase_T = KNN(K, distancias_T, Y)
 clase_L = KNN(K, distancias_L, Y)

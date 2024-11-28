@@ -100,9 +100,10 @@ new_x_features = np.array([new_x_norm ** (j + 1) for j in range(n)])
 
 # Predecir Y para el nuevo punto basado en el modelo
 new_y_pred = np.dot(new_x_features, B) + B0
+new_y_norm = normalization(new_y_pred)
 
 # Determinar la clase del nuevo punto
-if new_y >= new_y_pred: 
+if new_y >= new_y_norm: 
     nueva_clase = 1  # Clase 1: Por encima del ajuste
 else:
     nueva_clase = 0  # Clase 0: Por debajo del ajuste
