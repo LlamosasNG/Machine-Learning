@@ -12,6 +12,7 @@ def distancia_ecluidiana(X,x_test):
       distancia[i]= np.sqrt(d[i][0]+d[i][1])
   return distancia
 
+
 def Kmeans(data, k, epocas):
   data=np.array(data) #iguales
   numero_datos=len(data) #numero_datos lo tiene el profe
@@ -33,6 +34,7 @@ def Kmeans(data, k, epocas):
         centroides = centroides + [data[random_centroides]]
         break
         
+  
 ############################################################################
   # Calcular la distancia de los puntos a los centroides
   for iteraciones in range(epocas):
@@ -66,7 +68,7 @@ def Kmeans(data, k, epocas):
   ## Early stop
     #print(f"Centroides actuales: {len(centroides)}, Nuevos centroides: {len(Nuevos_Centroides)}")
     variacion = True
-    epsilon=0.000001
+    epsilon=0.0000000001
     for i in range(k):
       for j in range(num_caracteristicas):
         if(abs(Nuevos_Centroides[i][j]-centroides[i][j])) > epsilon:
@@ -87,14 +89,29 @@ def Kmeans(data, k, epocas):
   return centroides,clousters
 
 
-def graficar_puntos(data):
-  for i in range(len(data)):
-    plt.scatter(data[i][0], data[i][1], color='red')
-  plt.xlabel("x")
-  plt.ylabel("y")
+def graficar_puntos(data, clousters, centroides):
+  colors= ('red', 'blue', 'green', 'purple')
+  for clouster_index in range(len(clousters)):
+    x_points= [clousters[clouster_index][i][0] for i in range(len(clousters[clouster_index]))]
+    y_points= [clousters[clouster_index][i][1] for i in range(len(clousters[clouster_index]))]
+    plt.scatter(x_points, y_points, color=colors[clouster_index], label=f'Clouster {clouster_index + 1}')
+  x_centroides = [centroides[i][0] for i in range(len(centroides))]
+  y_centroides = [centroides[i][1] for i in range(len(centroides))]
+  plt.scatter(x_centroides, y_centroides, color='black',marker='x',s=100 ,label='Centroides')
+  plt.xlabel("x-axis")
+  plt.ylabel("y-axis")
   plt.title("Kmeans")
-  plt.grid()
+  plt.legend()
+  plt.grid(True)
   plt.show()
+  
+  #for i in range(len(data)):
+   # plt.scatter(data[i][0], data[i][1], color='red')
+  #plt.xlabel("x")
+  #plt.ylabel("y")
+  #plt.title("Kmeans")
+  #plt.grid()
+  #plt.show()
 
 data = [[1,2],[1.5,2.3],[1.2,1.9],
         [4,5],[4.1,5.1],[4.4,5.3], 
@@ -102,7 +119,7 @@ data = [[1,2],[1.5,2.3],[1.2,1.9],
         [15,16.1],[15.2,16.5],[14.9,15.9]
 ]
 
-k= 6
-epocas=100
-print(Kmeans(data, k, epocas))
-graficar_puntos(data)
+k= 4
+epocas=1000
+centroides, clousters = Kmeans(data, k, epocas)
+graficar_puntos(data,clousters,centroides)
