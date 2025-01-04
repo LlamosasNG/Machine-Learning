@@ -8,21 +8,44 @@ def distancia_ecluidiana(X, x_test):
     distancia = [np.sqrt(d[i][0] + d[i][1]) for i in range(len(d))]
     return distancia
 
+def inicializar_centroides_kmeans(data, k):
+    data = np.array(data)
+    num_caracteristicas = len(data[0])
+    num_datos = len(data)
+    centroides = [[0] * num_caracteristicas for _ in range(k)]  # Crear una lista de k centroides vacíos
+    
+    # Paso 1: Seleccionar el primer centroide aleatoriamente
+    primer_centroide = random.choice(data)
+    for j in range(num_caracteristicas):
+        centroides[0][j] = primer_centroide[j]  # Asignar el primer centroide
+    
+    # Selección de los siguientes centroides
+    distancias_minimas = [0] * num_datos  # Lista predefinida con tamaño fijo
+    for i in range(1, k):
+        for idx, punto in enumerate(data):
+            distancias = [distancia_ecluidiana([centroide], punto)[0] ** 2 for centroide in centroides[:i]]
+            distancias_minimas[idx] = min(distancias)  # Asignación directa sin append
+        
+        # Seleccionar el siguiente centroide con probabilidad proporcional a la distancia mínima
+        suma_distancias = sum(distancias_minimas)
+        probabilidades = [d / suma_distancias for d in distancias_minimas]
+        
+        siguiente_centroide_idx = np.random.choice(len(data), p=probabilidades)
+        siguiente_centroide = data[siguiente_centroide_idx]
+        
+        # Asignar el siguiente centroide a la lista
+        for j in range(num_caracteristicas):
+            centroides[i][j] = siguiente_centroide[j]
+
+    return centroides
+
 def Kmeans(data, k, epocas):
     data = np.array(data)
+    numero_datos = len(data)
     num_datos, num_caracteristicas = data.shape
 
-    # Inicializar aleatoriamente los centroides sin duplicados
-    indices_usados = [-1] * k
-    centroides = [[0] * num_caracteristicas for _ in range(k)]
-    for i in range(k):
-        while True:
-            random_centroides = random.randint(0, num_datos - 1)
-            if random_centroides not in indices_usados:
-                indices_usados[i] = random_centroides
-                for j in range(num_caracteristicas):
-                    centroides[i][j] = data[random_centroides][j]
-                break
+    # Inicializar los centroides usando K-Means++
+    centroides = inicializar_centroides_kmeans(data, k)
 
     # Iteraciones para calcular los clústeres y actualizar los centroides
     for iteraciones in range(epocas):
@@ -90,11 +113,11 @@ def graficar_puntos(data, clousters, centroides):
     plt.scatter(x_centroides, y_centroides, color='black', marker='x', s=100, label='Centroides')
     plt.xlabel("x-axis")
     plt.ylabel("y-axis")
-    plt.title("Kmeans")
+    plt.title("Kmeans++")
     plt.legend()
     plt.grid(True)
     plt.show()
-
+    
 # Datos de prueba
 data = [
     # Clase 1: Alrededor de (-50, -50)
@@ -146,7 +169,9 @@ data = [
     [-92, -90], [-91, -94], [-89, -93], [-94, -89], [-87, -88],
 ]
 
+# Ejecutar K-Means++
 k = 8
 epocas = 100
 centroides, clousters = Kmeans(data, k, epocas)
 graficar_puntos(data, clousters, centroides)
+    
