@@ -72,12 +72,7 @@ def Kmeans(data, k, epocas):
         clousters[clouster][puntos_por_clouster[clouster]] = data[i]
         puntos_por_clouster[clouster] += 1
 
-    # Reducir el tamaño de los clústeres eliminando puntos vacíos
-    clousters_final = []
-    for clouster_index in range(k):
-        clousters_final.append(clousters[clouster_index][:puntos_por_clouster[clouster_index]])
-
-    return centroides, clousters_final
+    return centroides, clousters
 
 def graficar_puntos(data, clousters, centroides):
     colors = ['red', 'blue', 'green', 'purple', 'orange', 'cyan', 'brown', 'magenta']

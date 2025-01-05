@@ -8,13 +8,12 @@ def distancia_ecluidiana(X, x_test):
     distancia = [np.sqrt(d[i][0] + d[i][1]) for i in range(len(d))]
     return distancia
 
-def inicializar_centroides_kmeans(data, k):
+def inicializar_centroides(data, k):
     data = np.array(data)
-    num_caracteristicas = len(data[0])
-    num_datos = len(data)
+    num_datos, num_caracteristicas = data.shape
     centroides = [[0] * num_caracteristicas for _ in range(k)]  # Crear una lista de k centroides vacíos
     
-    # Paso 1: Seleccionar el primer centroide aleatoriamente
+    # Seleccionar el primer centroide aleatoriamente
     primer_centroide = random.choice(data)
     for j in range(num_caracteristicas):
         centroides[0][j] = primer_centroide[j]  # Asignar el primer centroide
@@ -41,11 +40,10 @@ def inicializar_centroides_kmeans(data, k):
 
 def Kmeans(data, k, epocas):
     data = np.array(data)
-    numero_datos = len(data)
     num_datos, num_caracteristicas = data.shape
 
     # Inicializar los centroides usando K-Means++
-    centroides = inicializar_centroides_kmeans(data, k)
+    centroides = inicializar_centroides(data, k)
 
     # Iteraciones para calcular los clústeres y actualizar los centroides
     for iteraciones in range(epocas):
@@ -96,9 +94,7 @@ def Kmeans(data, k, epocas):
         puntos_por_clouster[clouster] += 1
 
     # Reducir el tamaño de los clústeres eliminando puntos vacíos
-    clousters_final = []
-    for clouster_index in range(k):
-        clousters_final.append(clousters[clouster_index][:puntos_por_clouster[clouster_index]])
+    clousters_final = [clousters[clouster_index][:puntos_por_clouster[clouster_index]] for clouster_index in range(k)]
 
     return centroides, clousters_final
 
