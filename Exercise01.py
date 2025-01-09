@@ -4,17 +4,17 @@ import numpy as np
 
 def distancia_ecluidiana(X,x_test):
   x_test = np.array(x_test)
-  d = (X-x_test)**2
+  d = (X - x_test)**2
   distancia = [None] * len(d)
   for i in range(len(d)):
-      distancia[i]= np.sqrt(d[i][0]+d[i][1])
+      distancia[i] = np.sqrt(d[i][0] + d[i][1])
   return distancia
 
 def Kmeans(data, k, epocas):
-  data=np.array(data)
+  data = np.array(data)
   indices_usados = [-1]*k
   centroides = []
-  num_datos, num_caracteristicas=data.shape
+  num_datos, num_caracteristicas = data.shape
   
   ## Asignar aleatoriamente los centroides 
   for i in range (k):

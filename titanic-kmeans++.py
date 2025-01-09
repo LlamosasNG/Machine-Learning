@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import pandas as pd
 import random
 import numpy as np
 
@@ -88,74 +88,29 @@ def Kmeans(data, k, epocas):
     
     return centroides, clousters
 
-def graficar_puntos(data, clousters, centroides):
-    colors = ['red', 'blue', 'green', 'purple', 'orange', 'cyan', 'brown', 'magenta']
-    for clouster_index in range(len(clousters)):
-        x_points = [clousters[clouster_index][i][0] for i in range(len(clousters[clouster_index]))]
-        y_points = [clousters[clouster_index][i][1] for i in range(len(clousters[clouster_index]))]
-        plt.scatter(x_points, y_points, color=colors[clouster_index % len(colors)], label=f'Clúster {clouster_index + 1}')
-    x_centroides = [centroides[i][0] for i in range(len(centroides))]
-    y_centroides = [centroides[i][1] for i in range(len(centroides))]
-    plt.scatter(x_centroides, y_centroides, color='black', marker='x', s=100, label='Centroides')
-    plt.xlabel("x-axis")
-    plt.ylabel("y-axis")
-    plt.title("K-means++")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+# Cargar los datos del archivo CSV
+ruta_archivo = './train.csv'
+datos = pd.read_csv(ruta_archivo)
 
-# Datos de prueba
-data = [
-    # Clase 1: Alrededor de (-50, -50)
-    [-50, -50], [-48, -52], [-55, -45], [-53, -48], [-47, -55],
-    [-54, -51], [-49, -49], [-52, -54], [-48, -47], [-50, -53],
-    [-51, -49], [-53, -52], [-47, -51], [-50, -47], [-48, -50],
-    [-52, -50], [-51, -54], [-49, -53], [-54, -49], [-47, -48],
+# Extraer las columnas relevantes
+Y = datos['Survived'].tolist()
+Sex = datos['Sex'].tolist()
+Age = datos['Age'].tolist()
+Pclass = datos['Pclass'].tolist()
 
-    # Clase 2: Alrededor de (-20, 20)
-    [-20, 20], [-18, 22], [-25, 25], [-23, 18], [-17, 15],
-    [-24, 19], [-19, 21], [-22, 24], [-18, 17], [-20, 23],
-    [-21, 19], [-23, 22], [-17, 21], [-20, 17], [-18, 20],
-    [-22, 20], [-21, 24], [-19, 23], [-24, 19], [-17, 18],
+# Procesar valores faltantes o inconsistentes
+moda_sex = max(set(Sex), key=Sex.count)  
+Sex = [moda_sex if pd.isna(s) else s for s in Sex]
+Sex = [1 if s == 'male' else 0 for s in Sex]  # 1: Hombre, 0: Mujer
 
-    # Clase 3: Alrededor de (0, -30)
-    [0, -30], [2, -32], [-5, -35], [-3, -28], [3, -25],
-    [-4, -29], [-1, -31], [-2, -34], [2, -27], [0, -33],
-    [-1, -29], [-3, -32], [3, -31], [0, -27], [2, -30],
-    [-2, -30], [-1, -34], [1, -33], [-4, -29], [3, -28],
+Age = [np.nan if pd.isna(a) else a for a in Age]
+promedio_edad = np.nanmean(Age)
+Age = [promedio_edad if np.isnan(a) else a for a in Age]
 
-    # Clase 4: Alrededor de (40, 40)
-    [40, 40], [42, 38], [35, 45], [43, 48], [37, 35],
-    [44, 41], [39, 39], [42, 44], [38, 37], [40, 43],
-    [41, 39], [43, 42], [37, 41], [40, 37], [38, 40],
-    [42, 40], [41, 44], [39, 43], [44, 39], [37, 38],
+moda_clase = max(set(Pclass), key=Pclass.count)
+Pclass = [moda_clase if pd.isna(c) else c for c in Pclass]
+Pclass = [int(c) for c in Pclass]
 
-    # Clase 5: Alrededor de (60, -60)
-    [60, -60], [58, -62], [65, -65], [63, -58], [57, -55],
-    [64, -59], [59, -61], [62, -64], [58, -57], [60, -63],
-    [61, -59], [63, -62], [57, -61], [60, -57], [58, -60],
-    [62, -60], [61, -64], [59, -63], [64, -59], [57, -58],
+# Crear la matriz de características X
+X = np.array(list(zip(Pclass, Age, Sex)))
 
-    # Clase 6: Alrededor de (-70, 70)
-    [-70, 70], [-68, 72], [-75, 75], [-73, 68], [-67, 65],
-    [-74, 69], [-69, 71], [-72, 74], [-68, 67], [-70, 73],
-    [-71, 69], [-73, 72], [-67, 71], [-70, 67], [-68, 70],
-    [-72, 70], [-71, 74], [-69, 73], [-74, 69], [-67, 68],
-
-    # Clase 7: Alrededor de (80, 10)
-    [80, 10], [78, 12], [85, 15], [83, 8], [77, 5],
-    [84, 9], [79, 11], [82, 14], [78, 7], [80, 13],
-    [81, 9], [83, 12], [77, 11], [80, 7], [78, 10],
-    [82, 10], [81, 14], [79, 13], [84, 9], [77, 8],
-
-    # Clase 8: Alrededor de (-90, -90)
-    [-90, -90], [-88, -92], [-95, -95], [-93, -88], [-87, -85],
-    [-94, -89], [-89, -91], [-92, -94], [-88, -87], [-90, -93],
-    [-91, -89], [-93, -92], [-87, -91], [-90, -87], [-88, -90],
-    [-92, -90], [-91, -94], [-89, -93], [-94, -89], [-87, -88],
-]
-
-k = 8
-epocas = 100
-centroides, clousters = Kmeans(data, k, epocas)
-graficar_puntos(data, clousters, centroides)

@@ -58,20 +58,16 @@ def Kmeans(data, k, epocas):
                     break
             if not variacion:
                 break
-
         if variacion:
             break
 
         centroides = Nuevos_Centroides
 
     # Agrupamiento final
-    clousters = [[[0] * num_caracteristicas for _ in range(num_datos)] for _ in range(k)]
-    puntos_por_clouster = [0] * k
+    clousters= [[] for _ in range(k)]
     for i in range(num_datos):
-        clouster = clouster_asignados[i]
-        clousters[clouster][puntos_por_clouster[clouster]] = data[i]
-        puntos_por_clouster[clouster] += 1
-
+        clousters[clouster_asignados[i]] = clousters[clouster_asignados[i]] + [data[i]] 
+    
     return centroides, clousters
 
 def graficar_puntos(data, clousters, centroides):
@@ -85,7 +81,7 @@ def graficar_puntos(data, clousters, centroides):
     plt.scatter(x_centroides, y_centroides, color='black', marker='x', s=100, label='Centroides')
     plt.xlabel("x-axis")
     plt.ylabel("y-axis")
-    plt.title("Kmeans")
+    plt.title("K-means")
     plt.legend()
     plt.grid(True)
     plt.show()
