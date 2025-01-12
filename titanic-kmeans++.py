@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 import random
 import numpy as np
@@ -11,28 +13,28 @@ def distancia_ecluidiana(X, x_test):
 def inicializar_centroides(data, k):
     data = np.array(data)
     num_datos = len(data)
-    
-    # Inicializar el array de centroides con tamaño k x num_caracteristicas
     num_caracteristicas = data.shape[1]
+    
+    # Inicializar la matriz de centroides
     centroides = np.zeros((k, num_caracteristicas))
     
-    # Seleccionar el primer centroide al azar
+    # Seleccionar el primer centroide aleatoriamente
     primer_centroide_idx = random.randint(0, num_datos - 1)
     centroides[0] = data[primer_centroide_idx]
     
     for i in range(1, k):
         # Calcular las distancias mínimas al conjunto actual de centroides
-        distancias_minimas = np.zeros(len(data))  # Crear un array inicializado con ceros
-        for idx, punto in enumerate(data):
+        distancias_minimas = []
+        for punto in data:
             distancias = [np.linalg.norm(punto - centroides[j]) for j in range(i)]
-            distancias_minimas[idx] = min(distancias)  # Asignar el mínimo directamente al índice correspondiente
-
-        # Elegir el siguiente centroide con probabilidad proporcional al cuadrado de la distancia
-        distancias_cuadradas = distancias_minimas ** 2
-        probabilidades = distancias_cuadradas / distancias_cuadradas.sum()
+            distancias_minimas.append(min(distancias))
+        
+        # Elegir el siguiente centroide con probabilidad proporcional a las distancias al cuadrado
+        distancias_cuadradas = np.array(distancias_minimas) ** 2
+        probabilidades = distancias_cuadradas / np.sum(distancias_cuadradas)
         siguiente_centroide_idx = np.random.choice(range(len(data)), p=probabilidades)
         centroides[i] = data[siguiente_centroide_idx]
-
+    
     return centroides
 
 def Kmeans(data, k, epocas):
@@ -88,9 +90,46 @@ def Kmeans(data, k, epocas):
     
     return centroides, clousters
 
+def graficar_clustering_3D(data, clousters, centroides):
+    colors = ['red', 'blue']
+    fig = plt.figure(figsize=(10, 7))
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Graficar puntos de cada clúster
+    for clouster_index, clouster in enumerate(clousters):
+        clouster = np.array(clouster)
+        if len(clouster) > 0:  # Verificar que el clúster no esté vacío
+            ax.scatter(
+                clouster[:, 0],  # Pclass
+                clouster[:, 1],  # Age
+                clouster[:, 2],  # Sex
+                color=colors[clouster_index % len(colors)],
+                label=f'Clúster {clouster_index + 1}'
+            )
+
+    # Graficar los centroides
+    centroides = np.array(centroides)
+    ax.scatter(
+        centroides[:, 0],  # Pclass
+        centroides[:, 1],  # Age
+        centroides[:, 2],  # Sex
+        color='black',
+        marker='x',
+        s=100,
+        label='Centroides'
+    )
+
+    # Etiquetas y leyenda
+    ax.set_xlabel('Pclass')
+    ax.set_ylabel('Age')
+    ax.set_zlabel('Sex')
+    ax.set_title('Clasificación 3D con K-Means++')
+    ax.legend()
+    plt.show()
+
 # Cargar los datos del archivo CSV
-ruta_archivo = './train.csv'
-datos = pd.read_csv(ruta_archivo)
+ruta_archivo = './train.csv'  # Reemplazar con la ruta de tu archivo
+datos = pd.read_csv(ruta_archivo).head(100)
 
 # Extraer las columnas relevantes
 Y = datos['Survived'].tolist()
@@ -114,3 +153,19 @@ Pclass = [int(c) for c in Pclass]
 # Crear la matriz de características X
 X = np.array(list(zip(Pclass, Age, Sex)))
 
+# Ejecutar el algoritmo K-Means++
+k = 2 
+epocas = 100
+centroides, clousters = Kmeans(X, k, epocas)
+
+# Llamar a la función para graficar
+graficar_clustering_3D(X, clousters, centroides)
+
+# Imprimir resultados
+print("Centroides:")
+for i, centroide in enumerate(centroides):
+    print(f"Clúster {i + 1}: {centroide}")
+
+print("\nPuntos en cada clúster:")
+for i, clouster in enumerate(clousters):
+    print(f"Clúster {i + 1}: {len(clouster)} puntos")

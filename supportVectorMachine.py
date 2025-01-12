@@ -24,7 +24,7 @@ def entrenamiento_MSV(X, Y):
                 b = b - lr * lamda * Y[i]
 
     # Identificar vectores de soporte considerando ambos márgenes
-    tolerancia = .5  # Definir qué tan cerca del margen se consideran los puntos
+    tolerancia = .0005  # Definir qué tan cerca del margen se consideran los puntos
     vectores_soporte_indices = [
         i for i, x in enumerate(X)
         if abs(Y[i] * (np.dot(x, w) + b) - 1) <= tolerancia  # Cercanía a los márgenes
@@ -69,8 +69,9 @@ plt.contour(xx, yy, Z, levels=[-1, 0, 1], alpha=0.8, linestyles=['--', '-', '--'
 plt.plot(xx, (-w[0] * xx - b) / w[1], 'k--')
 plt.title('Máquinas de Soporte Vectorial')
 plt.legend()
+plt.grid()
 plt.show()
 
-X_test = [2, 6]
+X_test = [-2, -4]
 prediccion = prediccion_MSV(X_test, w, b)
 print(f"La clase del valor es {prediccion}")

@@ -26,15 +26,14 @@ def entrenamiento_MSV(X, Y):
                 b = b - lr * lamda * Y[i]
 
     # Identificar vectores de soporte considerando ambos márgenes
-    tolerancia = 1
+    tolerancia = 0.0005  # Definir qué tan cerca del margen se consideran los puntos
     vectores_soporte_indices = [
         i for i, x in enumerate(X)
-        if abs(Y[i] * (np.dot(x, w) + b) - 1) <= tolerancia
+        if abs(Y[i] * (np.dot(x, w) + b) - 1) <= tolerancia  # Cercanía a los márgenes
     ]
     vectores_soporte = X[vectores_soporte_indices]
-    clases_vectores_soporte = Y[vectores_soporte_indices]  # Extraer las clases de los vectores de soporte
 
-    return w, b, vectores_soporte, vectores_soporte_indices, clases_vectores_soporte
+    return w, b, vectores_soporte, vectores_soporte_indices
 
 # Cargar los datos del archivo CSV
 ruta_archivo = './train.csv'
@@ -75,16 +74,13 @@ X = np.array(list(zip(Pclass, Age, SibSp)))
 X_fixed = X[indices_filtrados]
 
 # Entrenamiento con MSV
-w, b, vectores_soporte, vectores_soporte_indices, clases_vectores_soporte = entrenamiento_MSV(X_fixed, Y_fixed)
+w, b, vectores_soporte, vectores_soporte_indices = entrenamiento_MSV(X_fixed, Y_fixed)
 
-# Imprimir los vectores de soporte y sus clases
-print("Vectores de soporte:")
-for i, vector in enumerate(vectores_soporte):
-    print(f"Vector: {vector}, Clase: {clases_vectores_soporte[i]}")
+# Gráfica tridimensional
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
 
 # Graficar los datos
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
 ax.scatter(X_fixed[:, 0], X_fixed[:, 1], X_fixed[:, 2], c=Y_fixed, cmap=plt.cm.Paired, label='Datos')
 
 # Graficar vectores de soporte
@@ -92,6 +88,23 @@ ax.scatter(X_fixed[vectores_soporte_indices, 0],
            X_fixed[vectores_soporte_indices, 1],
            X_fixed[vectores_soporte_indices, 2],
            s=150, facecolors='yellow', edgecolors='red', linewidths=2, label='Vectores de Soporte')
+
+# Generar un rango para los planos
+x = np.linspace(X_fixed[:, 0].min(), X_fixed[:, 0].max(), 10)
+y = np.linspace(X_fixed[:, 1].min(), X_fixed[:, 1].max(), 10)
+x, y = np.meshgrid(x, y)
+
+# Hiperplano: z = -(w[0]*x + w[1]*y + b) / w[2]
+z = -(w[0] * x + w[1] * y + b) / w[2]
+
+# Márgenes: z = -(w[0]*x + w[1]*y + b ± 1) / w[2]
+z_margen_superior = -(w[0] * x + w[1] * y + (b + 1)) / w[2]
+z_margen_inferior = -(w[0] * x + w[1] * y + (b - 1)) / w[2]
+
+# Graficar el hiperplano y los márgenes
+ax.plot_surface(x, y, z, alpha=0.3, color='blue', label='Hiperplano')
+ax.plot_surface(x, y, z_margen_superior, alpha=0.2, color='green', label='Margen Superior')
+ax.plot_surface(x, y, z_margen_inferior, alpha=0.2, color='red', label='Margen Inferior')
 
 ax.set_xlabel('Pclass')
 ax.set_ylabel('Age')
