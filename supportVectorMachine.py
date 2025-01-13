@@ -24,7 +24,7 @@ def entrenamiento_MSV(X, Y):
                 b = b - lr * lamda * Y[i]
 
     # Identificar vectores de soporte considerando ambos márgenes
-    tolerancia = .0005  # Definir qué tan cerca del margen se consideran los puntos
+    tolerancia = .0005 
     vectores_soporte_indices = [
         i for i, x in enumerate(X)
         if abs(Y[i] * (np.dot(x, w) + b) - 1) <= tolerancia  # Cercanía a los márgenes

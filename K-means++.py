@@ -51,7 +51,7 @@ def Kmeans(data, k, epocas):
 
         # Actualizar centroides
         Nuevos_Centroides = [[0] * num_caracteristicas for _ in range(k)]
-        puntos_por_clouster = [0] * k
+        psuntos_por_clouster = [0] * k
         for i in range(num_datos):
             clouster = clouster_asignados[i]
             puntos_por_clouster[clouster] += 1
@@ -105,7 +105,7 @@ def graficar_puntos(data, clousters, centroides):
     plt.show()
 
 
-# Datos de prueba dispersos
+# Datos de prueba
 data = [
     # Clase 1: Alrededor de (-50, -50)
     [random.uniform(-55, -35), random.uniform(-55, -35)] for _ in range(20)
