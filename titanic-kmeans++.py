@@ -90,7 +90,7 @@ def Kmeans(data, k, epocas):
     
     return centroides, clousters
 
-def graficar_clustering_3D(data, clousters, centroides):
+def graficar_clustering_con_nuevo_punto(data, clousters, centroides, nuevo_punto, clouster_asignado):
     colors = ['red', 'blue']
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
@@ -119,6 +119,17 @@ def graficar_clustering_3D(data, clousters, centroides):
         label='Centroides'
     )
 
+    # Graficar el nuevo punto
+    ax.scatter(
+        nuevo_punto[0],  # Pclass
+        nuevo_punto[1],  # Age
+        nuevo_punto[2],  # Sex
+        color='green',
+        marker='o',
+        s=150,
+        label='Nuevo punto'
+    )
+
     # Etiquetas y leyenda
     ax.set_xlabel('Pclass')
     ax.set_ylabel('Age')
@@ -126,6 +137,11 @@ def graficar_clustering_3D(data, clousters, centroides):
     ax.set_title('Clasificación 3D con K-Means++')
     ax.legend()
     plt.show()
+    
+def clasificar_nuevo_punto(nuevo_punto, centroides):
+    distancias = distancia_ecluidiana(centroides, nuevo_punto)
+    clouster_asignado = np.argmin(distancias)
+    return clouster_asignado
 
 # Cargar los datos del archivo CSV
 ruta_archivo = './train.csv'  # Reemplazar con la ruta de tu archivo
@@ -158,10 +174,25 @@ k = 2
 epocas = 100
 centroides, clousters = Kmeans(X, k, epocas)
 
-# Llamar a la función para graficar
-graficar_clustering_3D(X, clousters, centroides)
+nuevo_punto = []
+nuevo_punto.append(int(input("Ingrese la clase de pasajero (Pclass, 1-3): ")))
+nuevo_punto.append(float(input("Ingrese la edad del pasajero: ")))
+nuevo_punto.append(int(input("Ingrese el sexo del pasajero (0 para mujer, 1 para hombre): ")))
 
-# Imprimir resultados
+nuevo_punto = np.array(nuevo_punto)
+clouster_asignado = clasificar_nuevo_punto(nuevo_punto, centroides)
+print(clouster_asignado)
+
+# Mostrar en terminal
+#print(f"El nuevo punto pertenece al clúster {clouster_asignado + 1}")
+if clouster_asignado == 0:
+    print("El pasajero NO sobrevivió.")
+else:
+    print("El pasajero sobrevivió.")
+    
+graficar_clustering_con_nuevo_punto(X, clousters, centroides, nuevo_punto, clouster_asignado)
+
+""" # Imprimir resultados
 print("Centroides:")
 for i, centroide in enumerate(centroides):
     print(f"Clúster {i + 1}: {centroide}")
@@ -169,3 +200,4 @@ for i, centroide in enumerate(centroides):
 print("\nPuntos en cada clúster:")
 for i, clouster in enumerate(clousters):
     print(f"Clúster {i + 1}: {len(clouster)} puntos")
+ """

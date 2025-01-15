@@ -36,6 +36,10 @@ def entrenamiento_MSV(X, Y):
 
     return w, b, vectores_soporte, vectores_soporte_indices, clases_vectores_soporte
 
+# Predicción para un nuevo punto
+def prediccion_MSV(X_test, w, b):
+    return np.sign(np.dot(X_test, w) + b)
+
 # Cargar los datos del archivo CSV
 ruta_archivo = './train.csv'
 datos = pd.read_csv(ruta_archivo)
@@ -77,6 +81,18 @@ X_fixed = X[indices_filtrados]
 # Entrenamiento con MSV
 w, b, vectores_soporte, vectores_soporte_indices, clases_vectores_soporte = entrenamiento_MSV(X_fixed, Y_fixed)
 
+nuevo_punto = []
+nuevo_punto.append(int(input("Ingrese la clase de pasajero (Pclass, 1-3): ")))
+nuevo_punto.append(float(input("Ingrese la edad del pasajero: ")))
+nuevo_punto.append(int(input("Ingrese el número de hermanos/esposos (SibSp): ")))
+
+nuevo_punto = np.array(nuevo_punto)
+clase_predicha = prediccion_MSV(nuevo_punto, w, b)
+
+# Mostrar en terminal
+print(f"El nuevo punto pertenece a la clase: {'Sobrevivió' if clase_predicha == 1 else 'No sobrevivió'}")
+
+
 # Imprimir los vectores de soporte y sus clases
 print("Vectores de soporte:")
 for i, vector in enumerate(vectores_soporte):
@@ -92,6 +108,10 @@ ax.scatter(X_fixed[vectores_soporte_indices, 0],
            X_fixed[vectores_soporte_indices, 1],
            X_fixed[vectores_soporte_indices, 2],
            s=150, facecolors='yellow', edgecolors='red', linewidths=2, label='Vectores de Soporte')
+
+# Graficar el nuevo punto
+ax.scatter(nuevo_punto[0], nuevo_punto[1], nuevo_punto[2],
+           color='green', marker='o', s=150, label='Nuevo punto')
 
 ax.set_xlabel('Pclass')
 ax.set_ylabel('Age')

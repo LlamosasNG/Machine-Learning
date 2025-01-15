@@ -113,8 +113,7 @@ data = [
     [random.uniform(-95, -75), random.uniform(-95, -75)] for _ in range(20)
 ]
 
-
-k = 8
+k = 3
 epocas = 100
 centroides, clousters = Kmeans(data, k, epocas)
 graficar_puntos(data, clousters, centroides)
